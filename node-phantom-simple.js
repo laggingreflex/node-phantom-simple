@@ -10,6 +10,7 @@ var exec            = require('child_process').exec;
 var util            = require('util');
 var path            = require('path');
 var debug           = require('debug');
+var promisify       = require('bluebird').promisify;
 
 var POLL_INTERVAL   = process.env.POLL_INTERVAL || 500;
 
@@ -97,7 +98,8 @@ var pageWaitForSelectorDeprecatedFn = util.deprecate(function () {}, "Deprecated
 var phantomPathDeprecatedFn = util.deprecate(function () {}, "Deprecated 'phantomPath' option - use 'path' instead");
 
 
-exports.create = function (options, callback) {
+exports.create = promisify(create);
+function create(options, callback) {
   if (callback && Object.prototype.toString.call(options) === '[object Function]') {
     createDeprecatedFn();
 
